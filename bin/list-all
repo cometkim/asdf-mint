@@ -5,4 +5,5 @@ set -eo pipefail
 # shellcheck source=../lib/utils.sh
 source "$(dirname "$0")/../lib/utils.sh"
 
-download_meatadata | extract_version | sort_versions
+versions="$(download_meatadata | extract_version | sort_versions)"
+echo $versions
