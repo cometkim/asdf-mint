@@ -67,7 +67,7 @@ function download_source() {
     mkdir -p $download_path
 
     echo "Downloading source from $source_url"
-    curl -Lo $tmpdir/archive.zip $source_url
+    curl -fLo $tmpdir/archive.zip $source_url
 
     unzip $tmpdir/archive.zip -d $tmpdir
 

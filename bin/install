@@ -16,7 +16,7 @@ function install_version() {
     mkdir -p $install_path/bin
 
     echo "Installing Mint v$version"
-    curl -Lo $install_path/bin/mint $bin_url
+    curl -fLo $install_path/bin/mint $bin_url
     chmod +x $install_path/bin/mint
   ) || (rm -rf $install_path; exit 1)
 }
