@@ -30,7 +30,7 @@ function install_ref() {
   local install_path=$2
 
   local download_path
-  if [[ "$ASDF_DOWNLOAD_PATH" != "" ]]; then
+  if [[ -n "$ASDF_DOWNLOAD_PATH" ]]; then
     download_path=$ASDF_DOWNLOAD_PATH
   else
     local tmpdir=$(get_temp_dir)
