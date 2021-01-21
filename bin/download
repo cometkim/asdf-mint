@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# shellcheck source=../lib/utils.bash
+source "$(dirname "$0")/../lib/utils.bash"
+
+download_source $ASDF_INSTALL_VERSION $ASDF_DOWNLOAD_PATH

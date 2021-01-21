@@ -1,0 +1,63 @@
+#!/bin/bash
+
+set -eo pipefail
+
+# shellcheck source=../lib/utils.bash
+source "$(dirname "$0")/../lib/utils.bash"
+
+function install_version() {
+  local version=$1
+  local install_path=$2
+
+  local platform=$(get_platform)
+  local bin_url=$(get_bin_url $version $platform)
+
+  (
+    mkdir -p $install_path/bin
+
+    echo "Installing Mint v$version"
+    curl -Lo $install_path/bin/mint $bin_url
+    chmod +x $install_path/bin/mint
+  ) || (rm -rf $install_path; exit 1)
+}
+
+function install_ref() {
+  local ref=$1
+  local install_path=$2
+
+  local tmpdir=$(get_temp_dir)
+  trap "rm -rf $tmpdir" EXIT
+
+  (
+    mkdir -p $install_path/bin
+
+    download_source $ref $tmpdir
+
+    cd $tmpdir
+
+    echo "Building Mint from source"
+    shards install
+    crystal build src/mint.cr -o $install_path/bin/mint -p --release --no-debug
+    chmod +x $install_path/bin/mint
+  ) || (rm -rf $install_path; exit 1)
+}
+
+function check_build_dependencies() {
+  if ! (command -v crystal && command -v shards) &> /dev/null; then
+    echo "Crystal environment is required to build Mint from source"
+    echo
+    echo "You can install Crystal via asdf-crystal plugin"
+    echo "$ asdf plugin add crystal"
+
+    exit 1
+  fi
+}
+
+install_type=$ASDF_INSTALL_TYPE
+
+if [[ $install_type -eq "version" ]]; then
+  install_version $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
+else
+  check_build_dependencies
+  install_ref $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
+fi
