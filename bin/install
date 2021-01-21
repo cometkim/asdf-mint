@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -eo pipefail
+set -x
 
 # shellcheck source=../lib/utils.sh
 source "$(dirname "$0")/../lib/utils.sh"
@@ -27,19 +28,24 @@ function install_ref() {
   local ref=$1
   local install_path=$2
 
-  local tmpdir=$(get_temp_dir)
-  trap "rm -rf $tmpdir" EXIT
+  local download_path
+  if [[ -v $ASDF_DOWNLOAD_PATH ]]; then
+    download_path=$ASDF_DOWNLOAD_PATH
+  else
+    local tmpdir=$(get_temp_dir)
+    trap "rm -rf $tmpdir" EXIT
+    download_path=$tmpdir
+    download_source $ref $download_path
+  fi
 
   (
     mkdir -p $install_path/bin
 
-    download_source $ref $tmpdir
-
-    cd $tmpdir
+    cd $download_path
 
     echo "Building Mint from source"
-    shards install
-    crystal build src/mint.cr -o $install_path/bin/mint -p --release --no-debug
+    shards install || fail "Couldn't install dependencies"
+    crystal build src/mint.cr -o $install_path/bin/mint -p --release --no-debug || fail "Couldn't build release binary"
     chmod +x $install_path/bin/mint
   ) || (rm -rf $install_path; exit 1)
 }
@@ -57,7 +63,7 @@ function check_build_dependencies() {
 
 install_type=$ASDF_INSTALL_TYPE
 
-if [[ $install_type -eq "version" ]]; then
+if [[ $install_type == "version" ]]; then
   install_version $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
 else
   check_build_dependencies
