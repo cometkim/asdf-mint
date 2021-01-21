@@ -69,7 +69,7 @@ function download_source() {
     echo "Downloading source from $source_url"
     curl -sSfLo $tmpdir/archive.zip $source_url || fail "Couldn't download source code from $source_url"
 
-    unzip $tmpdir/archive.zip -d $tmpdir
+    unzip -q $tmpdir/archive.zip -d $tmpdir
 
     mv $tmpdir/mint-$version/* $download_path/
   ) || (rm -rf $download_path; exit 1)
