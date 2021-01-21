@@ -67,10 +67,15 @@ function download_source() {
     mkdir -p $download_path
 
     echo "Downloading source from $source_url"
-    curl -fLo $tmpdir/archive.zip $source_url
+    curl -sSfLo $tmpdir/archive.zip $source_url || fail "Couldn't download source code from $source_url"
 
     unzip $tmpdir/archive.zip -d $tmpdir
 
     mv $tmpdir/mint-$version/* $download_path/
   ) || (rm -rf $download_path; exit 1)
+}
+
+function fail() {
+  echo -e "\e[31mFail:\e[m $*"
+  exit 1
 }

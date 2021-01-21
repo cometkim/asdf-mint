@@ -13,10 +13,12 @@ function install_version() {
   local bin_url=$(get_bin_url $version $platform)
 
   (
+    set -e
     mkdir -p $install_path/bin
 
     echo "Installing Mint v$version"
-    curl -fLo $install_path/bin/mint $bin_url
+    curl -sSfLo $install_path/bin/mint $bin_url || fail "Couldn't download the Mint binary from $bin_url"
+
     chmod +x $install_path/bin/mint
   ) || (rm -rf $install_path; exit 1)
 }
