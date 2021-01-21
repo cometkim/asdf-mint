@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-# shellcheck source=../lib/utils.bash
-source "$(dirname "$0")/../lib/utils.bash"
+# shellcheck source=../lib/utils.sh
+source "$(dirname "$0")/../lib/utils.sh"
 
 download_source $ASDF_INSTALL_VERSION $ASDF_DOWNLOAD_PATH
