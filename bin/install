@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -eo pipefail
-set -x
 
 # shellcheck source=../lib/utils.sh
 source "$(dirname "$0")/../lib/utils.sh"
