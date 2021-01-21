@@ -7,16 +7,19 @@ on:
       - master
 
 jobs:
-  shellcheck:
-    name: ShellCheck
-    if: |
-      github.event.pull_request != ''
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: reviewdog/action-shellcheck@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+  ## Couldn't use this for lib/ and bin/ becuase of the lack of customizability :/
+  #
+  # shellcheck:
+  #   name: ShellCheck
+  #   if: |
+  #     github.event.pull_request != ''
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: reviewdog/action-shellcheck@v1
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         pattern: "*.sh"
 
   test:
     name: ASDF plugin test

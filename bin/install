@@ -2,8 +2,8 @@
 
 set -eo pipefail
 
-# shellcheck source=../lib/utils.bash
-source "$(dirname "$0")/../lib/utils.bash"
+# shellcheck source=../lib/utils.sh
+source "$(dirname "$0")/../lib/utils.sh"
 
 function install_version() {
   local version=$1

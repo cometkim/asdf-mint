@@ -1,3 +1,5 @@
+#!/bin/bash
+
 GITHUB_REPO="https://github.com/mint-lang/mint"
 REGISTRY_URL="https://api.github.com/repos/mint-lang/mint/releases"
 
