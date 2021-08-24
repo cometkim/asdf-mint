@@ -49,12 +49,6 @@ function get_temp_dir() {
   echo -n $tmpdir
 }
 
-function check_install_type() {
-  if [ "$ASDF_INSTALL_TYPE" != "version" ]; then
-    fail "asdf-mint currently supports release install only"
-  fi
-}
-
 function download_source() {
   local version=$1
   local download_path=$2
